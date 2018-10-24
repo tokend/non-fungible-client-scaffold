@@ -122,6 +122,7 @@ export default {
   props: ['id'],
   data: _ => ({
     request: {
+      tokenCode: '',
       policies: [ASSET_POLICIES.requiresKyc]
     },
     documents: {
