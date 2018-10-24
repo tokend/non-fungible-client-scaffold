@@ -126,9 +126,7 @@ export default {
         EventDispatcher.dispatchShowSuccessEvent(i18n.iss_submit_success())
         this.rerenderForm()
       } catch (error) {
-        console.log(error)
-        console.log(error.constructor)
-        console.log(error.constructor === errors.NotFoundError)
+        console.error(error)
         if (error.constructor === errors.NotFoundError) {
           EventDispatcher.dispatchShowErrorEvent(i18n.iss_no_balance({ asset: this.request.code }))
           this.enable()

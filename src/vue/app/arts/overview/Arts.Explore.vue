@@ -61,7 +61,6 @@
         if (Object.keys(this.filters).length) {
           return list
             .filter(art => {
-              console.log(art)
               return art.code.toLowerCase().indexOf(this.filters.code) !== -1
             })
             .filter(art => {

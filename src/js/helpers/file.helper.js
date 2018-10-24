@@ -84,7 +84,7 @@ export class FileHelper {
         return resolve(image)
       }
       image.onerror = (error) => {
-        console.log(error)
+        console.error(error)
         return reject(error)
       }
     })
