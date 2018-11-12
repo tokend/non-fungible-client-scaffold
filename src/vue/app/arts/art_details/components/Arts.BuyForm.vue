@@ -23,18 +23,19 @@
                 :white-autofill="true"
                 type="number"
         />
-        <input-field-unchained
-                v-model.trim="form.price"
-                :label="i18n.art_price_per_token()"
-                name="order-quote-amount"
-                min="0"
-                step="0.000001"
-                class="app__input"
-                v-validate="'required'"
-                :white-autofill="true"
-                type="number"
-                :errorMessage="inputErrorMsg"
-        />
+        <!--can be used later-->
+        <!--<input-field-unchained-->
+                <!--v-model.trim="form.price"-->
+                <!--:label="i18n.art_price_per_token()"-->
+                <!--name="order-quote-amount"-->
+                <!--min="0"-->
+                <!--step="0.000001"-->
+                <!--class="app__input"-->
+                <!--v-validate="'required'"-->
+                <!--:white-autofill="true"-->
+                <!--type="number"-->
+                <!--:errorMessage="inputErrorMsg"-->
+        <!--/>-->
       </div>
     </form>
     <div class="app__form-actions">
@@ -51,9 +52,10 @@
         {{ i18n.art_buy_form_button_cancel() }}
       </button>
     </div>
-    <div class="buy-form__total-offer" v-if="+quoteAmount">
-      {{ 'art_form_total_offer_buy' | translate({ asset: this.form.quoteAsset, amount: +quoteAmount })}}
-    </div>
+    <!--can be used later-->
+    <!--<div class="buy-form__total-offer" v-if="+quoteAmount">-->
+      <!--{{ 'art_form_total_offer_buy' | translate({ asset: this.form.quoteAsset, amount: +quoteAmount })}}-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -83,7 +85,7 @@ export default {
     return {
       form: {
         quoteAsset: this.quoteAsset || '',
-        price: '',
+        price: '0.000001',
         amount: '',
         quoteAmount: ''
       },
@@ -152,7 +154,6 @@ export default {
       this.emitClose()
     },
     resetForm () {
-      this.form.price = ''
       this.form.amount = ''
       setTimeout(() => this.changeAllow(), 0)
     },

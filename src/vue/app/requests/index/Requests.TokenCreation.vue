@@ -158,7 +158,7 @@ export default {
         this.loadList()
         EventDispatcher.dispatchShowSuccessEvent('Cancel request success')
       } catch (error) {
-        console.log(error)
+        console.error(error)
         ErrorHandler.processUnexpected(error)
       }
       this.enable()

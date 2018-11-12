@@ -115,14 +115,16 @@ import { fileService } from '@/js/services/file.service'
 import { ArtCreationRecord } from '@/js/records/art_creation.record'
 
 const INITIAL_PREISSUED_AMOUNT = '100'
-
+const ASSET_POLICIE = [ASSET_POLICIES.requiresKyc, ASSET_POLICIES.canBeBaseInAtomicSwap, ASSET_POLICIES.transferable]
 export default {
   mixins: [FormMixin],
   components: { FileField },
   props: ['id'],
   data: _ => ({
+    ASSET_POLICIES,
     request: {
-      policies: [ASSET_POLICIES.requiresKyc]
+      tokenCode: '',
+      policies: ASSET_POLICIE
     },
     documents: {
       [documentTypes.assetPhoto]: null
@@ -191,7 +193,7 @@ export default {
         code: this.request.tokenCode,
         preissuedAssetSigner: preissuedAssetSigner,
         maxIssuanceAmount: initialPreissuedAmount,
-        policies: (this.request.policies).reduce((a, b) => (a | b), 0),
+        policies: this.request.policies.reduce((a, b) => (a | b), 0),
         initialPreissuedAmount: initialPreissuedAmount,
         details: {
           isPublic: true,

@@ -112,7 +112,7 @@ export default {
     i18n,
     ACCOUNT_TYPES,
     tickerBlocked: false,
-    balancesToView: ['BTC', 'ETH']
+    balancesToView: []
   }),
 
   computed: {
@@ -131,6 +131,7 @@ export default {
   created () {
     attachEventHandler(commonEvents.routesUpdateEvent, this.updateRoutes)
     this.hasSeenNotif = localStorage.hasOwnProperty('seen')
+    this.loadTokens()
   },
   destroyed () {
     this.destroyTicker()
@@ -138,7 +139,8 @@ export default {
   methods: {
     ...mapActions({
       logOut: vuexTypes.LOG_OUT,
-      loadAccountDetails: vuexTypes.GET_ACCOUNT_DETAILS
+      loadAccountDetails: vuexTypes.GET_ACCOUNT_DETAILS,
+      loadTokens: vuexTypes.GET_ALL_TOKENS
     }),
     destroyTicker () {
       clearInterval(this.ticker)

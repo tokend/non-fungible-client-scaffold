@@ -51,6 +51,10 @@ export class TokenRecord {
     return this._record.policies && this._record.policies.map(policy => policy.value).indexOf(xdr.AssetPolicy.withdrawable().value) !== -1
   }
 
+  get isQuoteInAtomicSwap () {
+    return !!(this.policy & ASSET_POLICIES.canBeQuoteInAtomicSwap)
+  }
+
   get isDepositable () {
     return !!this.externalSystemType
   }

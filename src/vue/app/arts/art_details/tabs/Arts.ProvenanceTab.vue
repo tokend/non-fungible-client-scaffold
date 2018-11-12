@@ -1,62 +1,62 @@
 <template>
-  <div class="provenance-tab">
-    <template v-if="!isLoggedIn">
-      <p class="provenance-tab__unavailable-for-guests
+    <div class="provenance-tab">
+        <template v-if="!isLoggedIn">
+            <p class="provenance-tab__unavailable-for-guests
                 app__page-explanations
                 app__page-explanations--secondary">
-        {{ 'art_provenance_tab_unavailable_title' | translate }}
-      </p>
-      <router-link
-        tag="button"
-        class="app__button-raised
+                {{ 'art_provenance_tab_unavailable_title' | translate }}
+            </p>
+            <router-link
+                    tag="button"
+                    class="app__button-raised
                provenance-tab__unavailable-for-guests-login-btn"
-        :to="{ name: 'login' }">
-        {{ 'lbl_signin' | translate }}
-      </router-link>
-    </template>
-    <template v-else-if="!isReady">
-      <loader :message="'art_provenance_tab_loading' | translate"/>
-    </template>
-    <template v-else-if="!list.length">
-      <div class="provenance-tab__no-list">
-        <md-icon class="md-size-4x">inbox</md-icon>
-        <p>{{ 'art_provenance_tab_no_provenance' | translate }}</p>
-      </div>
-    </template>
-    <div class="provenance-tab__inner" v-else>
-      <table class="provenance-tab__table">
-        <tr>
-          <th class="provenance-tab__table-cell
-                     provenance-tab__table-cell--head">
-            {{ 'art_date' | translate }}
-          </th>
-          <th class="provenance-tab__table-cell
-                     provenance-tab__table-cell--head">
-            {{ 'art_event' | translate }}
-          </th>
-        </tr>
-        <template v-for="(item, i) in list">
-          <tr :key="i" class="provenance-tab__table-row">
-            <td class="provenance-tab__table-cell
-                       provenance-tab__table-cell--head">
-              {{ item.date }}
-            </td>
-            <td class="provenance-tab__table-cell">{{ item.eventDetails | eventString }}</td>
-          </tr>
+                    :to="{ name: 'login' }">
+                {{ 'lbl_signin' | translate }}
+            </router-link>
         </template>
-      </table>
-      <template v-if="!isAllFetched">
-        <div class="provenance-tab__btn-wrp">
-          <button class="app__button-flat"
-                  :disabled="isPending"
-                  @click="loadNext"
-          >
-            {{ 'lbl_view_more' | translate }}
-          </button>
+        <template v-else-if="!isReady">
+            <loader :message="'art_provenance_tab_loading' | translate"/>
+        </template>
+        <template v-else-if="isReady && !paymentsList.length">
+            <div class="provenance-tab__no-list">
+                <md-icon class="md-size-4x">inbox</md-icon>
+                <p>{{ 'art_provenance_tab_no_provenance' | translate }}</p>
+            </div>
+        </template>
+        <div class="provenance-tab__inner" v-else>
+            <table class="provenance-tab__table">
+                <tr>
+                    <th class="provenance-tab__table-cell
+                     provenance-tab__table-cell--head">
+                        {{ 'art_date' | translate }}
+                    </th>
+                    <th class="provenance-tab__table-cell
+                     provenance-tab__table-cell--head">
+                        {{ 'art_event' | translate }}
+                    </th>
+                </tr>
+                <template v-for="(item, i) in paymentsList">
+                    <tr :key="i" class="provenance-tab__table-row">
+                        <td class="provenance-tab__table-cell
+                       provenance-tab__table-cell--head">
+                            {{ item.dateFull }}
+                        </td>
+                        <td class="provenance-tab__table-cell">{{ item | eventString }}</td>
+                    </tr>
+                </template>
+            </table>
+            <template v-if="!isAllFetched">
+                <div class="provenance-tab__btn-wrp">
+                    <button class="app__button-flat"
+                            :disabled="isPending"
+                            @click="loadNext"
+                    >
+                        {{ 'lbl_view_more' | translate }}
+                    </button>
+                </div>
+            </template>
         </div>
-      </template>
     </div>
-  </div>
 </template>
 
 <script>
@@ -73,10 +73,8 @@
   import { vuexTypes } from '@/vuex/types'
   import { i18n } from '@/js/i18n'
 
-  const EVENT_TYPES = {
-    issuance: 'issuance',
-    matchRecord: 'matchRecord'
-  }
+  import { Sdk } from '@/sdk'
+
   export default {
     name: 'ArtsProvenanceTab',
     props: ['art'],
@@ -99,197 +97,119 @@
     },
     filters: {
       eventString (eventDetails) {
-        if (eventDetails.type === EVENT_TYPES.issuance) {
-          return `${i18n.art_created_by()} ${eventDetails.creator} ${eventDetails.amount}%`
-        }
-        if (eventDetails.type === EVENT_TYPES.matchRecord) {
-          return `${eventDetails.seller} ${i18n.art_sold()} ${eventDetails.email} ${eventDetails.amount}% ${i18n.art_for()} ${eventDetails.quoteAmount} ${eventDetails.quoteAsset}`
-        }
+        return `${eventDetails.bidOwnerEmail} ${i18n.art_sold()} ${eventDetails.purchaserEmail} ${i18n.c(eventDetails.amount)}% ${i18n.art_for()} ${i18n.c(eventDetails.quoteAmount)} ${eventDetails.quoteAsset}`
       }
     },
     computed: {
       ...mapGetters([
-        vuexTypes.isLoggedIn
-      ]),
-      creator () {
-        return get(this.paymentsList[this.paymentsList.length - 2], 'fromAccounts[0].email')
-      },
-      list () {
-        return this.paymentsList.reduce((payments, payment) => {
-          if (payment instanceof IssuanceRecord) {
-            payments.push({
-              date: payment.date,
-              eventDetails: {
-                type: EVENT_TYPES.issuance,
-                creator: this.creator,
-                amount: +payment.amount
-              }
-            })
-          }
-          if (payment instanceof PublicMatchRecord) {
-            if (payment.fromAccounts.length === 1 && payment.toAccounts.length >= 1) {
-              payment.toAccounts.forEach(toAccount => {
-                const seller = payment.fromAccounts[0].email || payment.fromAccounts[0].account_id
-                payments.push({
-                  date: payment.date,
-                  eventDetails: {
-                    type: EVENT_TYPES.matchRecord,
-                    seller: seller,
-                    email: toAccount.email,
-                    amount: toAccount.amount,
-                    quoteAmount: toAccount.quoteAmount,
-                    quoteAsset: toAccount.quoteAsset
-                  }
-                })
-              })
-            }
-
-            if (payment.toAccounts.length === 1 && payment.fromAccounts.length !== 1) {
-              payment.fromAccounts.forEach(fromAccount => {
-                const seller = fromAccount.email || fromAccount.account_id
-                payments.push({
-                  date: payment.date,
-                  type: EVENT_TYPES.matchRecord,
-                  eventDetails: {
-                    type: EVENT_TYPES.matchRecord,
-                    seller: seller,
-                    email: payment.toAccounts[0].email,
-                    amount: fromAccount.amount,
-                    quoteAmount: fromAccount.quoteAmount,
-                    quoteAsset: fromAccount.quoteAsset
-                  }
-                })
-              })
-            }
-          }
-          return payments
-        }, [])
-      }
+        vuexTypes.isLoggedIn,
+        vuexTypes.userEmail,
+        vuexTypes.accountId
+      ])
     },
     methods: {
       async loadList () {
         this.isPending = true
-        const response = await accountsService.loadPublicPayments(this.art.code)
+        const response = await Sdk.horizon.operations.getPage({
+          operation_type: 18,
+          order: 'desc',
+          limit: config.TRANSACTIONS_PER_PAGE
+        })
         this.parseResponse(response)
         this.isPending = false
       },
       async loadNext () {
         this.isPending = true
-        const response = this.next()
+        const response = await this.next()
         await this.parseResponse(response)
         this.isPending = false
       },
       async parseResponse (response) {
-        const records = response.records.map(r => parseTransaction(r, this.art.code, true))
-        await this.loadEmails(records)
+        let records = response.data
+          .filter(r => r.atomicSwapDetails)
+          .map(r => parseTransaction(r, this.art.code, true))
+        records = await this.loadEmails(records)
         this.paymentsList = this.paymentsList.concat(records)
-        this.next = response.next
-        this.isAllFetched = response.records.length < config.TRANSACTIONS_PER_PAGE
+        this.next = response.fetchNext
+        this.isAllFetched = records.length < config.TRANSACTIONS_PER_PAGE
       },
       async loadEmails (records) {
         const accountIds = records
           .reduce((ids, record) => {
-            switch (record.constructor) {
-              case IssuanceRecord:
-                ids.add(record.creator)
-                break
-              case PublicMatchRecord:
-                record.toAccounts.map(toAccount => {
-                  ids.add(toAccount.account_id)
-                })
-                record.fromAccounts.map(fromAccount => {
-                  ids.add(fromAccount.account_id)
-                })
-                break
-              default:
-                break
-            }
+            ids.add(record.bidOwnerId)
+            ids.add(record.purchaserId)
             return ids
           }, new Set())
-
         const details = (await accountsService.loadMultipleAccountDetails(accountIds)).data('users')
         records.forEach(record => {
-          switch (record.constructor) {
-            case IssuanceRecord:
-              const email = get(details, `${record.creator}.email`)
-              if (email) { record.creatorEmail = email }
-              break
-            case PublicMatchRecord:
-              record.toAccounts.map(toAccount => {
-                toAccount.email = get(details, `${toAccount.account_id}.email`)
-              })
-              record.fromAccounts.map(fromAccount => {
-                fromAccount.email = get(details, `${fromAccount.account_id}.email`)
-              })
-              break
-            default:
-              break
-          }
+          record.bidOwnerEmail = record.bidOwnerId === this.accountId ? this.userEmail : get(details, `${record.bidOwnerId}.email`)
+          record.purchaserEmail = record.purchaserId === this.accountId ? this.userEmail : get(details, `${record.purchaserId}.email`)
         })
+        return records
       }
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  @import '~@scss/variables';
+    @import '~@scss/variables';
 
-  .provenance-tab__table {
-    color: $col-md-primary;
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .provenance-tab__table-head {
-    text-align: left;
-  }
-
-  .provenance-tab__inner {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  .provenance-tab__table-cell {
-    border-radius: 10px;
-    padding: 1 * $point 2 * $point;
-    text-align: left;
-    white-space: nowrap;
-
-    &--head { border: none }
-    &:first-child {
-      padding-left: 0;
-    }
-  }
-
-  .provenance-tab__btn-wrp {
-    margin-top: 3 * $point;
-    text-align: center;
-  }
-
-  .provenance-tab__no-list {
-    width: 100%;
-    text-align: center;
-    margin: 0 auto;
-
-    & > i {
-      color: $col-md-primary-secondary-inactive !important;
+    .provenance-tab__table {
+        color: $col-md-primary;
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 100%;
     }
 
-    & > p {
-      color: $col-md-primary-inactive;
+    .provenance-tab__table-head {
+        text-align: left;
     }
-  }
 
-  .provenance-tab__unavailable-for-guests {
-    padding-top: 24px;
-    margin-bottom: 16px !important;
-    text-align: center;
-    max-width: 100% !important;
-  }
+    .provenance-tab__inner {
+        width: 100%;
+        overflow-x: auto;
+    }
 
-  .provenance-tab__unavailable-for-guests-login-btn {
-    margin: 0 auto 24px;
-    display: block;
-  }
+    .provenance-tab__table-cell {
+        border-radius: 10px;
+        padding: 1 * $point 2 * $point;
+        text-align: left;
+        white-space: nowrap;
+
+        &--head { border: none }
+        &:first-child {
+            padding-left: 0;
+        }
+    }
+
+    .provenance-tab__btn-wrp {
+        margin-top: 3 * $point;
+        text-align: center;
+    }
+
+    .provenance-tab__no-list {
+        width: 100%;
+        text-align: center;
+        margin: 0 auto;
+
+        & > i {
+            color: $col-md-primary-secondary-inactive !important;
+        }
+
+        & > p {
+            color: $col-md-primary-inactive;
+        }
+    }
+
+    .provenance-tab__unavailable-for-guests {
+        padding-top: 24px;
+        margin-bottom: 16px !important;
+        text-align: center;
+        max-width: 100% !important;
+    }
+
+    .provenance-tab__unavailable-for-guests-login-btn {
+        margin: 0 auto 24px;
+        display: block;
+    }
 </style>

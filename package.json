@@ -17,7 +17,9 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "@babel/runtime-corejs2": "^7.1.2",
     "@std/esm": "^0.18.0",
+    "@tokend/js-sdk": "git+ssh://git@gitlab.com/tokend/new-js-sdk#feature/atomic_swap",
     "@tokend/wallet.js": "https://github.com/tokend/wallet.js.git",
     "@vue/test-utils": "^1.0.0-beta.11",
     "accounting": "^0.4.1",
@@ -38,7 +40,7 @@
     "moment": "^2.19.1",
     "node-polyglot": "^2.2.2",
     "raven-js": "^3.22.1",
-    "tokend-js-sdk": "git+https://github.com/tokend/js-sdk.git",
+    "tokend-js-sdk": "https://github.com/tokend/js-sdk#feature/atomic-swap",
     "ua-parser-js": "^0.7.17",
     "vee-validate": "^2.0.0-rc.21",
     "vue": "^2.5.2",

@@ -153,6 +153,7 @@ const getters = {
   userWithdrawableTokens: 'userWithdrawableTokens',
   userKycDetails: 'userKycDetails',
   userKycDocuments: 'userKycDocuments',
+  quoteAssetsInAtomicSwaps: 'quoteAssetsInAtomicSwaps',
 
   // transactions:
   transactions: 'transactions',

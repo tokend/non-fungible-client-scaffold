@@ -78,6 +78,9 @@ import SalesOwnedIndex from '../vue/app/salesOwned/SalesOwned.Index'
 import PreissuanceUpload from '../vue/app/preissuanceUpload/PreissuanceUpload.Entry'
 import PreissuanceUploadIndex from '../vue/app/preissuanceUpload/index/PreissuanceUpload.Index'
 
+import BidsEntry from '../vue/app/bids/Bids.Entry'
+import BidsNew from '../vue/app/bids/Bids.New'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -491,6 +494,21 @@ const router = new Router({
               name: 'preissuance-upload.index',
               meta: { pageName: PAGES_NAMES.preIssuance },
               component: PreissuanceUploadIndex,
+              props: true
+            }
+          ]
+        },
+        {
+          name: 'app.bids',
+          path: '/bids',
+          component: BidsEntry,
+          redirect: { 'path': '/bids/new' },
+          children: [
+            {
+              path: '/bids/new/:code',
+              name: 'bids.new',
+              component: BidsNew,
+              meta: { pageName: PAGES_NAMES.openBid },
               props: true
             }
           ]

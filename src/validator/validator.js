@@ -53,6 +53,16 @@ const rules = [
     name: 'max_issuance',
     getMessage: (field, [max, code]) => `You cant sell more tokens than you have. Available: ${i18n.c(max)} ${code}`,
     validate: (value, [max]) => +value <= +max
+  },
+  {
+    name: 'max_arts_amount',
+    getMessage: _ => 'There is no such amount of arts',
+    validate: (value, [max]) => +value <= +max
+  },
+  {
+    name: 'max_amount',
+    getMessage: (field, [maxAmount]) => `Maximum available amount is ${i18n.c(maxAmount)}`,
+    validate: (value, [max]) => +value <= +max
   }
 ]
 

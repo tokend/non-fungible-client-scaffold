@@ -107,7 +107,7 @@
           this.history = (await chartsService.loadChartsForTokenPair(base, quote)).data()
         } catch (error) {
           if (error instanceof errors.NotFoundError) {
-            console.log('error')
+            console.error(error)
             ErrorHandler.processUnexpected(error)
           }
         }

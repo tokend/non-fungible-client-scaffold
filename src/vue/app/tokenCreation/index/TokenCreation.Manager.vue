@@ -189,7 +189,7 @@ export default {
         EventDispatcher.dispatchShowSuccessEvent(i18n.kyc_upload_success())
         this.$router.push({ path: '/requests/token-creation' })
       } catch (error) {
-        console.log(error)
+        console.error(error)
         ErrorHandler.processUnexpected(error)
       }
       this.enable()

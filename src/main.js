@@ -29,7 +29,7 @@ import { Tabs, Tab } from 'vue-tabs-component'
 
 // filters
 import { translate } from '@/vue/common/filters/translate'
-import { formatDate } from '@/vue/common/filters/formatDate'
+import { humanizePastDate, formatDate, humanizeFutureDate, getDateByDMY } from '@/js/utils/dates.util'
 import { formatConvertedCurrency, formatCurrency, formatNumber } from '@/js/i18n/numbers'
 
 // ripple effect:
@@ -47,7 +47,10 @@ Vue.use(VueSimpleMDE)
 Vue.component('tabs', Tabs)
 Vue.component('tab', Tab)
 Vue.filter('translate', translate)
+Vue.filter('humanizePastDate', humanizePastDate)
 Vue.filter('formatDate', formatDate)
+Vue.filter('humanizeFutureDate', humanizeFutureDate)
+Vue.filter('getDateByDMY', getDateByDMY)
 Vue.filter('formatConvertedCurrency', formatConvertedCurrency())
 Vue.filter('formatCurrency', formatCurrency())
 Vue.filter('formatNumber', formatNumber())

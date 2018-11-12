@@ -1,51 +1,25 @@
 <template>
     <div>
         <template v-if="list.length">
-            <template v-if="isBuy">
-                {{ 'art_market_buy' | translate}}
-            </template>
-            <template v-else>
-                {{ 'art_market_sell' | translate}}
-            </template>
+            <h3 class="art-market__heading">
+                <template v-if="isBuy">
+                    {{ 'art_market_buy' | translate}}
+                </template>
+                <template v-else>
+                    {{ 'art_market_sell' | translate}}
+                </template>
+            </h3>
             <md-table>
                 <md-table-row>
-                    <md-table-head class="art-market-tab__list-cell">
-                        {{ 'art_market_column_date' | translate }}
-                    </md-table-head>
-                    <md-table-head class="art-market-tab__list-cell">
-                        {{ 'art_market_column_amount' | translate }}
-                    </md-table-head>
-                    <md-table-head class="art-market-tab__list-cell">
-                        {{ 'art_market_column_price' | translate }}
-                    </md-table-head>
-                    <md-table-head class="art-market-tab__list-cell">
-                        {{ 'art_market_column_offer' | translate }}
-                    </md-table-head>
-                    <md-table-head class="art-market-tab__list-cell
-                              art-market-tab__list-cell--right"
-                                   v-if="hasOffer">
-                        {{ 'art_market_column_actions' | translate }}
-                    </md-table-head>
+                    <md-table-head>{{ 'art_market_column_date' | translate }}</md-table-head>
+                    <md-table-head>{{ 'art_bid_available' | translate }}</md-table-head>
+                    <md-table-head v-if="hasOffer">{{ 'art_market_column_actions' | translate }}</md-table-head>
                 </md-table-row>
                 <template v-for="(order, i) in list">
-                    <md-table-row class="art-market-tab__list-row"
-                                  :key="`${i}-market-row`">
-                        <md-table-cell class="art-market-tab__list-cell">
-                            {{ order.createdAt | formatDate }}
-                        </md-table-cell>
-                        <md-table-cell class="art-market-tab__list-cell">
-                            {{ 'c' | translate(order.baseAmount) }}
-                        </md-table-cell>
-                        <md-table-cell class="art-market-tab__list-cell">
-                            {{ 'c' | translate(order.price) }}
-                            {{ order.quoteAssetCode }}
-                        </md-table-cell>
-                        <md-table-cell class="art-market-tab__list-cell">
-                            {{ 'c' | translate(order.quoteAmount) }}
-                            {{ order.quoteAssetCode }}
-                        </md-table-cell>
-                        <md-table-cell class="art-market-tab__list-cell
-                                art-market-tab__list-cell--right">
+                    <md-table-row :key="`${i}-market-row`">
+                        <md-table-cell>{{ order.createdAt | humanizePastDate }}</md-table-cell>
+                        <md-table-cell>{{ 'c' | translate(order.baseAmount) }}%</md-table-cell>
+                        <md-table-cell>
                             <template v-if="order.owner === accountId">
                                 <button v-ripple
                                         class="app__button-flat
@@ -63,15 +37,14 @@
         </template>
         <template v-else>
             <div class="art-market-tab__list-no-transactions">
-                <md-icon class="md-size-4x">inbox</md-icon>
-                <p>
-                    <template v-if="isBuy">
-                        {{ 'art_market_no_orders_message' | translate({ asset: quoteAsset }) }}
-                    </template>
-                    <template v-else>
-                        {{ 'art_market_no_sell_orders_message' | translate({ asset: quoteAsset }) }}
-                    </template>
-                </p>
+                <no-data-message v-if="isBuy"
+                        icon-name="inbox"
+                        :msg-title="''"
+                        :msg-message="i18n.art_market_no_orders_message({ asset: quoteAsset })"/>
+                <no-data-message v-else
+                        icon-name="inbox"
+                        :msg-title="''"
+                        :msg-message="i18n.art_market_no_sell_orders_message({ asset: quoteAsset })"/>
                 <div class="art-market-tab__list-no-transactions-btn">
                     <template v-if="isBuy">
                         <template v-if="isCanBuy && !isFormShown">
@@ -95,7 +68,7 @@
             </div>
         </template>
         <div class="art-market-tab__btns">
-            <template v-if="isCanBuy && list.length && !isFormShown && isBuy">
+            <template v-if="isCanBuy && list.length && !isFormShown && isBuy && !hasOffer">
                 <div class="art-market-tab__actions-wrp">
                     <button class="app__button-raised art-market-tab__list-action-btn"
                             @click="showForm"
@@ -119,24 +92,21 @@
                 </div>
             </template>
         </div>
-        <template v-if="!isCanBuy && isBuy">
-            <p class="art-market-tab__list-explanations
-                      app__page-explanations
-                      app__page-explanations--secondary">
-                {{ 'art_market_trade_unavailable_for_artists' | translate }}
-            </p>
-        </template>
     </div>
 </template>
 
 <script>
-  import {commonEvents} from '@/js/events/common_events'
+  import { commonEvents } from '@/js/events/common_events'
+  import NoDataMessage from '@/vue/common/messages/NoDataMessage'
+  import { i18n } from '@/js/i18n'
 
   const CANCEL_ORDER_EVENT_NAME = 'cancel-order'
   export default {
     name: 'trade-orders-buy',
     mixins: [],
-    components: {},
+    components: {
+      NoDataMessage
+    },
     props: {
       list: {type: Array, required: true},
       isFormShown: {type: Boolean, required: true},
@@ -148,6 +118,9 @@
       quoteAsset: {type: String, required: true},
       accountId: {type: String, required: true}
     },
+    data: _ => ({
+      i18n
+    }),
     methods: {
       showForm () {
         this.$emit(commonEvents.showMakeOfferFormEvent, this.isBuy)
@@ -160,7 +133,55 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "~@scss/variables";
+    @import "~@scss/mixins";
+
     .art-market-tab__btns {
         display: flex;
+    }
+
+    .art-market-tab__list-row {
+        cursor: pointer;
+    }
+
+    .art-market-tab__cancel-btn {
+        margin-left: -18px;
+    }
+
+    .art-market-tab__actions-wrp {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 2 * $point;
+        padding-left: 24px;
+
+        & > .art-market-tab__list-action-btn {
+            margin-top: 0;
+            flex-shrink: 0;
+        }
+    }
+
+    .art-market-tab__list-no-transactions-btn {
+        margin-top: 3 * $point;
+    }
+
+    .art-market__heading{
+        margin-left: 24px;
+        margin-bottom: 15px;
+        color: $col-md-primary;
+    }
+
+    .art-market-tab__list-no-transactions {
+        width: 100%;
+        text-align: center;
+        margin: 0 auto;
+
+        & > i {
+            color: $col-md-primary-secondary-inactive !important;
+        }
+
+        & > p {
+            color: $col-md-primary-inactive;
+        }
     }
 </style>
