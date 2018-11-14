@@ -101,8 +101,8 @@
     },
     methods: {
       async loadBid () {
-        const respons = await Sdk.horizon.atomicSwapBid.get(this.request.bidId)
-        this.newBid = RecordFactory.createBidRecord(respons.data)
+        const response = await Sdk.horizon.atomicSwapBid.get(this.request.bidId)
+        this.newBid = RecordFactory.createBidRecord(response.data)
       }
     }
   }
