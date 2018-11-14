@@ -23,19 +23,6 @@
                 :white-autofill="true"
                 type="number"
         />
-        <!--can be used later-->
-        <!--<input-field-unchained-->
-                <!--v-model.trim="form.price"-->
-                <!--:label="i18n.art_price_per_token()"-->
-                <!--name="order-quote-amount"-->
-                <!--min="0"-->
-                <!--step="0.000001"-->
-                <!--class="app__input"-->
-                <!--v-validate="'required'"-->
-                <!--:white-autofill="true"-->
-                <!--type="number"-->
-                <!--:errorMessage="inputErrorMsg"-->
-        <!--/>-->
       </div>
     </form>
     <div class="app__form-actions">
@@ -52,10 +39,6 @@
         {{ i18n.art_buy_form_button_cancel() }}
       </button>
     </div>
-    <!--can be used later-->
-    <!--<div class="buy-form__total-offer" v-if="+quoteAmount">-->
-      <!--{{ 'art_form_total_offer_buy' | translate({ asset: this.form.quoteAsset, amount: +quoteAmount })}}-->
-    <!--</div>-->
   </div>
 </template>
 
