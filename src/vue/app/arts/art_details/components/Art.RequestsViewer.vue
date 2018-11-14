@@ -107,7 +107,7 @@
         $padding: 3 * $point;
 
         color: $col-md-primary;
-        padding: $point $padding $point 0;
+        padding: $point 3 * $point $point 0;
         text-align: center;
         white-space: nowrap;
 
