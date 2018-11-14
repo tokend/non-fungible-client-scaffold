@@ -12,7 +12,7 @@
         <div class="arts-explore__card-wrapper-outer"
           v-for="art in artList"
           :key="art.code"
-             v-if="art.photoUrl">
+           v-if="art.photoUrl">
           <router-link :to="{name: 'arts.art-details', params: { id: art.code }}"
                       tag="button"
                       class="arts-explore__card-wrapper">
