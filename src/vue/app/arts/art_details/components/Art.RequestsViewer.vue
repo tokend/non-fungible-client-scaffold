@@ -37,8 +37,8 @@
                         <td :class="`request-viewer__record-cell
                          request-viewer__record-cell--left
                          request-viewer__state-cell
-                         request-viewer__state-cell--${REQUEST_STATES_VERBOSE[request.state] || request.state}`">
-                            {{ REQUEST_STATES_VERBOSE[request.state] || request.state }}
+                         request-viewer__state-cell--${REQUEST_STATES_STR[request.state] || request.state}`">
+                            {{ REQUEST_STATES_STR[request.state] || request.state }}
                         </td>
 
                         <td class="request-viewer__record-cell">
@@ -51,7 +51,7 @@
 
                         <td class="request-viewer__record-cell">
                             <template
-                                    v-if="request.address && (request.state !== REQUEST_STATES_VERBOSE.permanently_rejected)">
+                                    v-if="request.address && (request.state !== REQUEST_STATES_STR.permanently_rejected)">
                                 <button class="app__button-icon"
                                         @click="activeRequest = request; isDialogOpened = true">
                                     <md-icon md-src="/static/qr-code.svg"/>
@@ -78,7 +78,7 @@
   import NoDataMessage from '../../../../common/messages/NoDataMessage'
   import SwapAddress from './Arts.AddressViewer'
 
-  import { REQUEST_STATES_VERBOSE } from '@/js/const/request_states.const'
+  import { REQUEST_STATES_STR } from '@/js/const/request_states.const'
   import { i18n } from '@/js/i18n'
 
   export default {
@@ -87,7 +87,7 @@
       i18n,
       isDialogOpened: false,
       activeRequest: null,
-      REQUEST_STATES_VERBOSE
+      REQUEST_STATES_STR
     }),
     components: {
       NoDataMessage,
