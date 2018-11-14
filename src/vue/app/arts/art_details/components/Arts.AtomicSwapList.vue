@@ -130,8 +130,7 @@
     }
 
     .art-market__heading,
-    .art-market__bid-heading,
-    .art-market__bid-record-cell {
+    .art-market__bid-heading {
         color: $col-md-primary;
     }
 
@@ -143,32 +142,6 @@
     .art-market__bid-heading{
         margin-bottom: 15px;
         color: $col-md-primary;
-    }
-
-    .art-market__bid-record {
-        margin-bottom: 4 * $point;
-    }
-
-    .art-market__bid-record-heading{
-        height: 54px;
-    }
-
-    .art-market__bid-record-heading{
-        height: 54px;
-    }
-
-    .art-market__bid-record-cell {
-        $padding: 3 * $point;
-
-        padding: 0 $padding 0 0;
-        text-align: left;
-        white-space: nowrap;
-    }
-
-    .art-market__back-btn {
-        padding-left: 0;
-        margin-left: -0.4rem;
-        padding-top: 0;
     }
 
     .art-market__cancel-icon {
