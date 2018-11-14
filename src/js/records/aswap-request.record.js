@@ -1,10 +1,5 @@
 import _get from 'lodash/get'
 
-const TASKS = Object.freeze({
-  txProcessing: 1,
-  txSucceeded: 2
-})
-
 export class AtomicSwapRequest {
   constructor (record) {
     this.id = record.id || '0'
@@ -30,13 +25,5 @@ export class AtomicSwapRequest {
     return details
       .filter(d => d)
       .map(d => d.address || d.Address)[0]
-  }
-
-  get isProcessing () {
-    return !(this.pendingTasks & TASKS.txProcessing)
-  }
-
-  get isSucceded () {
-    return !(this.pendingTasks & TASKS.txSucceeded)
   }
 }
