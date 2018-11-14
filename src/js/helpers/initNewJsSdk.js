@@ -2,7 +2,7 @@ import { Sdk } from '@/sdk'
 import { Wallet } from '@tokend/js-sdk'
 import config from '@/config'
 
-export async function initApp () {
+export async function initializeSDK () {
   await Sdk.init(config.HORIZON_SERVER)
 }
 

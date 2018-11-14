@@ -52,7 +52,7 @@
 
   import { dispatchAppEvent } from '../../js/events/helpers'
   import { commonEvents } from '../../js/events/common_events'
-  import { initApp, initWallet } from '@/js/helpers/initNewJsSdk'
+  import { initializeSDK, initWallet } from '@/js/helpers/initNewJsSdk'
 
   import moment from 'moment'
 
@@ -98,7 +98,7 @@
     },
 
     async created () {
-      await initApp()
+      await initializeSDK()
       if (this.isLoggedIn) {
         initWallet(this.$store.getters.accountSeed, this.accountId, this.$store.getters.walletId)
       }
