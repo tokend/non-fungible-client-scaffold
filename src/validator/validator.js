@@ -56,7 +56,7 @@ const rules = [
   },
   {
     name: 'max_arts_amount',
-    getMessage: _ => 'There is no such amount of arts',
+    getMessage: _ => 'Insufficient token amount',
     validate: (value, [max]) => +value <= +max
   },
   {
