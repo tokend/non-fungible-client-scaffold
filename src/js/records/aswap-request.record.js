@@ -5,7 +5,7 @@ const TASKS = Object.freeze({
   txSucceeded: 2
 })
 
-export class ASwapRequest {
+export class AtomicSwapRequest {
   constructor (record) {
     this.id = record.id || '0'
     this.requestor = record.requestor

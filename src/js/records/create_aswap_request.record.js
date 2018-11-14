@@ -1,6 +1,6 @@
 import { Sdk } from '@/sdk'
 
-export class CreateASwapRequestRecord {
+export class CreateAtomicSwapRequestRecord {
   constructor (record) {
     this._record = record.data
     this.envelopeXdr = record.data.envelopeXdr
@@ -17,6 +17,6 @@ export class CreateASwapRequestRecord {
   }
 
   askRequestID () {
-    return this.result().result().results()[0].tr().createASwapRequestResult().success().requestId().toString()
+    return this.result().result().results()[0].tr().createAtomicSwapRequestResult().success().requestId().toString()
   }
 }

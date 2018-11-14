@@ -74,7 +74,7 @@ export default {
   art_active_bids: 'Active bids',
   art_bid_id: 'ID',
   art_bid_available: 'Available',
-  art_no_bid_created_at: 'Opened',
+  art_bid_opened: 'Opened',
   art_cancel_bid: 'Delete your bid. Please note that locked tickets won\'t be returned',
   art_no_bids: 'Unfortunately, there are no bids at the moment',
   art_available: 'Available',

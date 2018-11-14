@@ -7,7 +7,7 @@
                     <md-table>
                         <md-table-row>
                             <md-table-head>{{ 'art_bid_available' | translate }}</md-table-head>
-                            <md-table-head>{{ 'art_no_bid_created_at' | translate }}</md-table-head>
+                            <md-table-head>{{ 'art_bid_opened' | translate }}</md-table-head>
                             <md-table-head></md-table-head>
                         </md-table-row>
                         <template v-for="(bid, i) in bids">

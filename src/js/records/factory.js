@@ -16,7 +16,7 @@ import { TransferV2Record } from './transferV2.record'
 import { SaleCreationRecord } from './sale_creation.record'
 import { ArtRecord } from './art.record'
 import { BidRecord } from './bid.record'
-import { ASwapRequest } from './aswap-request.record'
+import { AtomicSwapRequest } from './aswap-request.record'
 import { ReviewRequestRecord } from './review_request.record'
 
 export class RecordFactory {
@@ -92,8 +92,8 @@ export class RecordFactory {
     return new BidRecord(...arguments)
   }
 
-  static createASwapRequestRecord () {
-    return new ASwapRequest(...arguments)
+  static createAtomicSwapRequestRecord () {
+    return new AtomicSwapRequest(...arguments)
   }
 
   static createReviewRequestRecord () {

@@ -62,7 +62,7 @@
       },
       async getRequests () {
         const response = await Sdk.horizon.request.getAllForAtomicSwap({requestor: this.accountId}) // state:
-        const requests = response.data.map(r => RecordFactory.createASwapRequestRecord(r))
+        const requests = response.data.map(r => RecordFactory.createAtomicSwapRequestRecord(r))
 
         function compareData (a, b) {
           const timeA = new Date(a.createdAt)

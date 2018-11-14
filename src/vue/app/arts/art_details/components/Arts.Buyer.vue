@@ -130,7 +130,7 @@
         if (!await confirmAction()) return
         this.disable()
         try {
-          const response = await bidsService.createASwapRequest({
+          const response = await bidsService.createAtomicSwapRequest({
             bidID: this.bid.id,
             baseAmount: this.form.amount,
             quoteAsset: this.activeQuote.asset
@@ -159,7 +159,7 @@
             window.setTimeout(resolve, 5000)
           })
           response = await Sdk.horizon.request.get(requestId)
-          request = RecordFactory.createASwapRequestRecord(response.data)
+          request = RecordFactory.createAtomicSwapRequestRecord(response.data)
         }
         this.succeededRequest = request
         this.isDialogOpened = true

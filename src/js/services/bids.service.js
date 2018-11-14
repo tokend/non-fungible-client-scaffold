@@ -1,6 +1,6 @@
 import { Service } from './service'
 import { Sdk } from '@/sdk'
-import { CreateASwapRequestRecord } from '@/js/records/create_aswap_request.record'
+import { CreateAtomicSwapRequestRecord } from '@/js/records/create_aswap_request.record'
 
 export class BidsService extends Service {
   createBid (opts) {
@@ -22,15 +22,15 @@ export class BidsService extends Service {
     return Sdk.horizon.transactions.submit(envelope)
   }
 
-  async createASwapRequest (opts) {
-    const operation = Sdk.base.CreateAtomicSwapRequestBuilder.createASwapRequest(opts)
+  async createAtomicSwapRequest (opts) {
+    const operation = Sdk.base.CreateAtomicSwapRequestBuilder.createAtomicSwapRequest(opts)
 
     let envelope = new Sdk.base.TransactionBuilder(Sdk.getInstance().wallet.accountId)
       .addOperation(operation)
       .build()
     envelope.sign(Sdk.getInstance().wallet.keypair)
 
-    return new CreateASwapRequestRecord(await Sdk.horizon.transactions.submit(envelope))
+    return new CreateAtomicSwapRequestRecord(await Sdk.horizon.transactions.submit(envelope))
   }
 }
 
