@@ -61,7 +61,7 @@ const rules = [
   },
   {
     name: 'max_amount',
-    getMessage: (field, [maxAmount]) => `Maximum available amount is ${i18n.c(maxAmount)}`,
+    getMessage: (field, [maxAmount]) => `Maximum amount is ${i18n.c(maxAmount)}`,
     validate: (value, [max]) => +value <= +max
   }
 ]
