@@ -22,10 +22,7 @@
                         {{ 'art_address' | translate }}
                     </th>
                 </tr>
-
                 <template v-for="request in requests">
-
-
                     <tr class="request-viewer__record">
 
                         <td class="request-viewer__record-cell
