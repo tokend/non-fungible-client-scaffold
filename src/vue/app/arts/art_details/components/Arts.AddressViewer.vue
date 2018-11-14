@@ -40,7 +40,7 @@
     </template>
 
     <template v-else>
-      <loader :message="i18n.lbl_loading()"/>
+      <loader :message="'lbl_loading' | translate"/>
     </template>
 
   </div>

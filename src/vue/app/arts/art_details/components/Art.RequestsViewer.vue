@@ -47,8 +47,7 @@
                         </td>
 
                         <td class="request-viewer__record-cell">
-                            <template
-                                    v-if="request.address && (request.state !== REQUEST_STATES_STR.permanently_rejected)">
+                            <template v-if="request.address && (request.state !== REQUEST_STATES_STR.permanently_rejected)">
                                 <button class="app__button-icon"
                                         @click="activeRequest = request; isDialogOpened = true">
                                     <md-icon md-src="/static/qr-code.svg"/>
