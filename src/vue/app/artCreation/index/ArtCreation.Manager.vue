@@ -115,7 +115,7 @@ import { fileService } from '@/js/services/file.service'
 import { ArtCreationRecord } from '@/js/records/art_creation.record'
 
 const INITIAL_PREISSUED_AMOUNT = '100'
-const ASSET_POLICIE = [ASSET_POLICIES.requiresKyc, ASSET_POLICIES.canBeBaseInAtomicSwap, ASSET_POLICIES.transferable]
+const DEFAULT_POLICIES = [ASSET_POLICIES.requiresKyc, ASSET_POLICIES.canBeBaseInAtomicSwap, ASSET_POLICIES.transferable]
 export default {
   mixins: [FormMixin],
   components: { FileField },
@@ -124,7 +124,7 @@ export default {
     ASSET_POLICIES,
     request: {
       tokenCode: '',
-      policies: ASSET_POLICIE
+      policies: DEFAULT_POLICIES
     },
     documents: {
       [documentTypes.assetPhoto]: null
