@@ -189,7 +189,7 @@
           if (this.isLoggedIn) await this.loadBalances()
           await this.loadArtOffers()
           this.tickerBlocked = false
-        }, 5000000)// provenance 5000
+        }, 5000)
       },
       async loadArtOffers () {
         const responseBuyersList = await offersService.loadTradeOffers({
