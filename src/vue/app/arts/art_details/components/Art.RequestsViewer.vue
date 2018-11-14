@@ -26,15 +26,15 @@
                     <tr class="request-viewer__record">
 
                         <td class="request-viewer__record-cell
-                       request-viewer__record-cell--left
-                       request-viewer__record-cell--bold">
+                                   request-viewer__record-cell--left
+                                   request-viewer__record-cell--bold">
                             {{ i18n.c(request.baseAmount) }}%
                         </td>
 
                         <td :class="`request-viewer__record-cell
-                         request-viewer__record-cell--left
-                         request-viewer__state-cell
-                         request-viewer__state-cell--${REQUEST_STATES_STR[request.state] || request.state}`">
+                                     request-viewer__record-cell--left
+                                     request-viewer__state-cell
+                                     request-viewer__state-cell--${REQUEST_STATES_STR[request.state] || request.state}`">
                             {{ REQUEST_STATES_STR[request.state] || request.state }}
                         </td>
 
