@@ -18,7 +18,7 @@
                 <template v-for="(order, i) in list">
                     <md-table-row :key="`${i}-market-row`">
                         <md-table-cell>{{ order.createdAt | humanizePastDate }}</md-table-cell>
-                        <md-table-cell>{{ 'c' | translate(order.baseAmount) }}%</md-table-cell>
+                        <md-table-cell>{{ i18n.c(order.baseAmount) }}%</md-table-cell>
                         <md-table-cell>
                             <template v-if="order.owner === accountId">
                                 <button v-ripple

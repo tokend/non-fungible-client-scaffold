@@ -69,7 +69,6 @@ export default {
   art_provenance_tab_no_provenance: 'No provenance yet',
   art_provenance_tab_unavailable_title: 'This feature is not available for guest and unverified users',
   art_provenance_tab_loading: 'Loading...',
-  art_form_total_offer_buy: 'Total offer buy: %{amount} %{asset}',
   art_form_total_offer_sell: 'Total offer sell: %{amount} %{asset}',
   art_active_bids: 'Active bids',
   art_bid_id: 'ID',
