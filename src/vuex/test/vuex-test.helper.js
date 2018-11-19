@@ -35,10 +35,6 @@ export const testAction = (opts, done) => {
       try {
         expect(expectedMutation.type).to.equal(type)
         if (payload) {
-          console.log('mutation payload:')
-          console.log(payload)
-          console.log('expected payload:')
-          console.log(expectedMutationPayload)
           expect(payload).to.deep.equal(expectedMutationPayload)
         }
       } catch (error) {

@@ -27,7 +27,6 @@ export class ArtCreationRecord {
   }
 
   _getPolicies () {
-    console.log()
     return get(this._record, 'details.asset_create.policies') ? this._record.details.asset_create.policies.map(policy => policy.value) : []
   }
 }
