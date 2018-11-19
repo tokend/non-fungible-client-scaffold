@@ -14,10 +14,10 @@ export class TxRecord {
   }
 
   _getDate () {
-    return getDateByDMY(this._record.ledger_close_time)
+    return getDateByDMY(this._record.ledger_close_time || this._record.ledgerCloseTime)
   }
 
   _getFullDate () {
-    return formatDate(this._record.ledger_close_time)
+    return formatDate(this._record.ledger_close_time || this._record.ledgerCloseTime)
   }
 }

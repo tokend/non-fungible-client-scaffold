@@ -115,6 +115,7 @@
   import { accountsService } from '@/js/services/accounts.service'
   import { KycTemplateParser } from '@/vue/app/verification/spec/kyc-template-parser'
   import { fileService } from '@/js/services/file.service'
+  import { initWallet } from '@/js/helpers/initNewJsSdk'
 
   const ACCOUNT_TYPES_VERBOSE = Object.freeze({
     [userTypes.general]: 'General',
@@ -220,6 +221,7 @@
               ErrorHandler.processUnexpected(error)
           }
         }
+        initWallet(this.$store.getters.accountSeed, this.accountId, this.$store.getters.walletId)
         this.enable()
       },
 
@@ -239,7 +241,7 @@
           }
           const blobId = await this.updateKycData({
             details: KycTemplateParser.toTemplate(this.kyc, this.selectedUserType),
-            documents: KycTemplateParser.getSaveableDocuments(this.kyc.documents),
+            documents: KycTemplateParser.getSaveableDocuments(this.kyc.documents || {}),
             blobType: this.selectedUserType === userTypes.general
                         ? blobTypes.kycForm.str
                         : blobTypes.syndicate_kyc.str

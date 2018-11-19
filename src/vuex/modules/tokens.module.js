@@ -30,6 +30,7 @@ export const actions = {
 
 export const getters = {
   tokens: state => state.tokens.sort((a, b) => a.code > b.code ? 1 : -1),
+  quoteAssetsInAtomicSwaps: state => state.tokens.filter(token => token.isQuoteInAtomicSwap),
   walletTokens: state => state.tokens.filter(token => token.isWalletToken),
   walletNonStatsTokens: state => state.tokens.filter(token => (token.isWalletToken && !token.isStatsToken)),
   userOwnedTokens: state => state.userOwnedTokens,

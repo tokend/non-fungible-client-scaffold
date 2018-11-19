@@ -4,6 +4,7 @@
   <transfer      v-else-if="tx instanceof Transfer" :tx="tx"/>
   <transfer-v2   v-else-if="tx instanceof TransferV2" :tx="tx"/>
   <match         v-else-if="tx instanceof Match" :tx="tx"/>
+  <atomic-swap   v-else-if="tx instanceof ReviewRequest" :tx="tx"/>
 </template>
 
 <script>
@@ -12,6 +13,7 @@
   import Transfer from './components/Details.Transfer'
   import TransferV2 from './components/Details.TransferV2'
   import Match from './components/Details.Match'
+  import AtomicSwap from './components/Details.AtomicSwap'
 
   import { RecordTypes } from '@/js/records/types'
 
@@ -25,14 +27,16 @@
       Issuance,
       Transfer,
       TransferV2,
-      Match
+      Match,
+      AtomicSwap
     },
     data: _ => ({
       Withdrawal: RecordTypes.WithdrawalRecord,
       Issuance: RecordTypes.IssuanceRecord,
       Transfer: RecordTypes.TransferRecord,
       TransferV2: RecordTypes.TransferV2Record,
-      Match: RecordTypes.MatchTransaction
+      Match: RecordTypes.MatchTransaction,
+      ReviewRequest: RecordTypes.ReviewRequestRecord
     })
   }
 </script>

@@ -13,3 +13,7 @@ export const REQUEST_STATES_STR = Object.freeze({
   rejected: 'rejected',
   permanentlyRejected: 'permanently_rejected'
 })
+
+export const REQUEST_STATES_VERBOSE = Object.freeze({
+  [REQUEST_STATES_STR.permanentlyRejected]: 'rejected'
+})

@@ -12,6 +12,7 @@ import { MatchRecord, MatchTransaction } from './match.record'
 import { TxRecord } from './tx.record'
 import { AssetPairRecord } from './asset_pair.record'
 import { TradeRecord } from './trade.record'
+import { ReviewRequestRecord } from './review_request.record'
 
 export const RecordTypes = {
   AssetPairRecord,
@@ -28,5 +29,6 @@ export const RecordTypes = {
   MatchRecord,
   TradeRecord,
   TxRecord,
-  MatchTransaction
+  MatchTransaction,
+  ReviewRequestRecord
 }

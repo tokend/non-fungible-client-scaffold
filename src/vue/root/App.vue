@@ -1,37 +1,39 @@
 <template>
   <div id="app">
-    <template v-if="!isAuthPage">
-      <md-app md-waterfall md-mode="fixed">
+    <template v-if="isAppInitialized">
+      <template v-if="!isAuthPage">
+        <md-app md-waterfall md-mode="fixed">
 
-        <md-app-toolbar class="md-primary app__sidebar" v-if="!isAuthPage">
-          <div class="md-toolbar-row">
-            <md-button class="md-icon-button app__sidebar-icon"
-                      @click="menuVisible = !menuVisible">
-              <md-icon>menu</md-icon>
-            </md-button>
-            <navbar/>
-          </div>
-        </md-app-toolbar>
+          <md-app-toolbar class="md-primary app__sidebar" v-if="!isAuthPage">
+            <div class="md-toolbar-row">
+              <md-button class="md-icon-button app__sidebar-icon"
+                         @click="menuVisible = !menuVisible">
+                <md-icon>menu</md-icon>
+              </md-button>
+              <navbar/>
+            </div>
+          </md-app-toolbar>
 
-        <md-app-drawer md-permanent="full"
-                      :md-active.sync="menuVisible"
-                      v-if="!isAuthPage">
-          <sidebar @hide-sidebar="hideSidebar"/>
-        </md-app-drawer>
+          <md-app-drawer md-permanent="full"
+                         :md-active.sync="menuVisible"
+                         v-if="!isAuthPage">
+            <sidebar @hide-sidebar="hideSidebar"/>
+          </md-app-drawer>
 
-        <md-app-content>
-          <router-view/>
-          <snackbar/>
-          <file-viewer/>
-          <loader-bar/>
-        </md-app-content>
+          <md-app-content>
+            <router-view/>
+            <snackbar/>
+            <file-viewer/>
+            <loader-bar/>
+          </md-app-content>
 
-      </md-app>
-    </template>
-    <template v-else>
-      <router-view/>
-      <loader-bar/>
-      <snackbar/>
+        </md-app>
+      </template>
+      <template v-else>
+        <router-view/>
+        <loader-bar/>
+        <snackbar/>
+      </template>
     </template>
   </div>
 </template>
@@ -50,6 +52,7 @@
 
   import { dispatchAppEvent } from '../../js/events/helpers'
   import { commonEvents } from '../../js/events/common_events'
+  import { initializeSDK, initWallet } from '@/js/helpers/initNewJsSdk'
 
   import moment from 'moment'
 
@@ -65,14 +68,16 @@
     },
 
     data: () => ({
-      menuVisible: false
+      menuVisible: false,
+      isAppInitialized: false
     }),
 
     computed: {
       ...mapGetters([
         vuexTypes.userAccountId,
         vuexTypes.isLoggedIn,
-        vuexTypes.userEmail
+        vuexTypes.userEmail,
+        vuexTypes.accountId
       ]),
       year () {
         return moment().year() // can use in footer, ex: (c) TokenD 2018
@@ -92,11 +97,16 @@
       }
     },
 
-    created () {
+    async created () {
+      await initializeSDK()
+      if (this.isLoggedIn) {
+        initWallet(this.$store.getters.accountSeed, this.accountId, this.$store.getters.walletId)
+      }
       window.setTimeout(() => {
         this.$store.commit(vuexTypes.KEEP_SESSION)
       }, 1000)
       this.subscribeToUserLogout()
+      this.isAppInitialized = true
     },
 
     methods: {

@@ -1,61 +1,78 @@
 <template>
     <div class="art-market-tab">
-
-        <div class="art-market-tab__lists">
-            <buy-sell-list
-                    :list="buyersList"
-                    :is-form-shown="isBuyFormShown"
-                    :is-buy="true"
-                    :is-can-buy="isCanBuy"
-                    :is-can-sell="isCanSell"
-                    :quote-asset="quoteAsset"
-                    :has-offer="hasOffer"
-                    :is-pending="isPending"
-                    :account-id="accountId"
-                    class="art-market-tab__list"
-                    @show-make-offer-form="handleFormShow"
-                    @cancel-order="cancelOrder"
-            />
-            <buy-sell-list
-                    :list="sellersList"
-                    :is-form-shown="isSellFormShown"
-                    :is-buy="false"
-                    :is-can-buy="isCanBuy"
-                    :is-can-sell="isCanSell"
-                    :quote-asset="quoteAsset"
-                    :has-offer="hasOffer"
-                    :is-pending="isPending"
-                    :account-id="accountId"
-                    class="art-market-tab__list"
-                    @show-make-offer-form="handleFormShow"
-                    @cancel-order="cancelOrder"
-            />
-
-        </div>
         <template v-if="!isLoggedIn">
             <p class="art-market-tab__list-explanations
-                app__page-explanations
-                app__page-explanations--secondary">
+        app__page-explanations
+        app__page-explanations--secondary">
                 {{ 'art_market_trade_unavailable_unverified_message' | translate }}
             </p>
         </template>
-        <template v-if="isBuyFormShown">
-            <div class="app-market__buy-form-wrp">
-                <buy-form
-                        :art="art"
+        <template v-else>
+            <template v-if="!bids">
+                <loader :message="i18n.art_modal_loading()"/>
+            </template>
+            <div class="art-market-tab__lists">
+                <buy-sell-list
+                        v-if="!isBuyFormShown"
+                        :list="buyersList"
+                        :is-form-shown="isBuyFormShown"
+                        :is-buy="true"
+                        :is-can-buy="isCanBuy"
+                        :is-can-sell="isCanSell"
                         :quote-asset="quoteAsset"
-                        @close-form="(isBuyFormShown = false); loadArtOffers()"
+                        :has-offer="hasOffer"
+                        :is-pending="isPending"
+                        :account-id="accountId"
+                        class="art-market-tab__list"
+                        @show-make-offer-form="handleFormShow"
+                        @cancel-order="cancelOrder"
                 />
-            </div>
-        </template>
-        <template v-if="isSellFormShown">
-            <div class="app-market__buy-form-wrp">
-                <sell-form
+                <template v-if="isBuyFormShown">
+                    <div class="app-market__buy-form-wrp">
+                        <buy-form
+                                :art="art"
+                                :quote-asset="quoteAsset"
+                                @close-form="(isBuyFormShown = false); loadArtOffers()"
+                        />
+                    </div>
+                </template>
+                <!--this part is not used -->
+                <template v-if="false">
+                    <buy-sell-list
+                            v-if="!isSellFormShown"
+                            :list="sellersList"
+                            :is-form-shown="isSellFormShown"
+                            :is-buy="false"
+                            :is-can-buy="isCanBuy"
+                            :is-can-sell="isCanSell"
+                            :quote-asset="quoteAsset"
+                            :has-offer="hasOffer"
+                            :is-pending="isPending"
+                            :account-id="accountId"
+                            class="art-market-tab__list"
+                            @show-make-offer-form="handleFormShow"
+                            @cancel-order="cancelOrder"
+                    />
+                    <template v-if="isSellFormShown">
+                        <div class="app-market__buy-form-wrp">
+                            <sell-form
+                                    :art="art"
+                                    :quote-asset-code="quoteAsset"
+                                    :is-creator="isCreator"
+                                    @close-form="(isSellFormShown = false); loadArtOffers()"
+                                    @art-update-request="$emit(UPDATE_REQUEST_EVENT_NAME)"
+                            />
+                        </div>
+                    </template>
+                </template>
+                <arts-atomic-swap-list
+                        v-if="bids"
+                        :bids="bids"
                         :art="art"
-                        :quote-asset-code="quoteAsset"
-                        :is-creator="isCreator"
-                        @close-form="(isSellFormShown = false); loadArtOffers()"
-                        @art-update-request="$emit(UPDATE_REQUEST_EVENT_NAME)"
+                        class="art-market-tab__list"
+                        :is-can-sell="isCanSell"
+                        @load-market="$emit('load-market')"
+                        @cancel-bid="cancelOrder"
                 />
             </div>
         </template>
@@ -63,24 +80,28 @@
 </template>
 
 <script>
-  import {translate} from '@/vue/common/filters/translate'
-  import {ORDER_TYPES} from '@/js/const/order-types'
+  import { translate } from '@/vue/common/filters/translate'
+  import { ORDER_TYPES } from '@/js/const/order-types'
   import OrderMakerMixin from './order-maker.mixin'
   import SubmitterMixin from '@/vue/common/mixins/submitter.mixin'
-  import {vuexTypes} from '@/vuex/types'
-  import {mapGetters, mapActions} from 'vuex'
-  import {ACCOUNT_TYPES} from '@/js/const/xdr.const'
+  import { vuexTypes } from '@/vuex/types'
+  import { mapGetters, mapActions } from 'vuex'
+  import { ACCOUNT_TYPES } from '@/js/const/xdr.const'
   import BuyForm from './Arts.BuyForm'
   import SellForm from './Arts.SellForm'
   import BuySellList from './Arts.BuySellList'
-  import {RecordFactory} from '@/js/records/factory'
-  import {offersService} from '@/js/services/offer.service'
+  import { RecordFactory } from '@/js/records/factory'
+  import { offersService } from '@/js/services/offer.service'
+  import ArtsAtomicSwapList from './Arts.AtomicSwapList'
 
-  import {ErrorHandler} from '@/js/errors/error_handler'
-  import {EventDispatcher} from '@/js/events/event_dispatcher'
-  import {confirmAction} from '@/js/modals/confirmation_message'
+  import { ErrorHandler } from '@/js/errors/error_handler'
+  import { EventDispatcher } from '@/js/events/event_dispatcher'
+  import { confirmAction } from '@/js/modals/confirmation_message'
 
-  import {SECONDARY_MARKET_ORDER_BOOK_ID} from '@/js/const/offers.const'
+  import { SECONDARY_MARKET_ORDER_BOOK_ID } from '@/js/const/offers.const'
+
+  import Loader from '@/vue/app/common/Loader'
+  import { i18n } from '@/js/i18n'
 
   const UPDATE_REQUEST_EVENT_NAME = 'art-update-request'
 
@@ -92,9 +113,17 @@
     components: {
       BuyForm,
       SellForm,
-      BuySellList
+      BuySellList,
+      ArtsAtomicSwapList,
+      Loader
+    },
+    props: {
+      art: null,
+      quoteAsset: '',
+      bids: null
     },
     data: _ => ({
+      i18n,
       UPDATE_REQUEST_EVENT_NAME,
       ORDER_TYPES,
       buyersList: [],
@@ -105,10 +134,6 @@
       tickerBlocked: false,
       ACCOUNT_TYPES
     }),
-    props: {
-      art: null,
-      quoteAsset: ''
-    },
     created () {
       this.loadArtOffers()
       this.initTicker()
@@ -121,22 +146,30 @@
         loadOffers: vuexTypes.GET_BUY_OFFERS
       }),
       async cancelOrder (order) {
-        if (!await confirmAction()) return
-        this.disable()
-        try {
-          await offersService.cancelOffer({
-            baseBalance: this.accountBalances[order.baseAssetCode].balance_id,
-            quoteBalance: this.accountBalances[order.quoteAssetCode].balance_id,
-            offerId: '' + order.id,
-            price: order.price,
-            orderBookId: SECONDARY_MARKET_ORDER_BOOK_ID
-          })
-          await this.loadArtOffers()
-          EventDispatcher.dispatchShowSuccessEvent(translate('trd_offer_canceled'))
-        } catch (error) {
-          ErrorHandler.processUnexpected(error)
+        let temporaryOrder = {}
+        if (order) {
+          if (!await confirmAction()) return
+          temporaryOrder = order
+        } else {
+          temporaryOrder = this.buyersList.find(order => order.owner === this.accountId)
         }
-        this.enable()
+        if (temporaryOrder) {
+          this.disable()
+          try {
+            await offersService.cancelOffer({
+              baseBalance: this.accountBalances[temporaryOrder.baseAssetCode].balance_id,
+              quoteBalance: this.accountBalances[temporaryOrder.quoteAssetCode].balance_id,
+              offerId: '' + temporaryOrder.id,
+              price: temporaryOrder.price,
+              orderBookId: SECONDARY_MARKET_ORDER_BOOK_ID
+            })
+            await this.loadArtOffers()
+            EventDispatcher.dispatchShowSuccessEvent(translate('trd_offer_canceled'))
+          } catch (error) {
+            ErrorHandler.processUnexpected(error)
+          }
+          this.enable()
+        }
       },
       handleFormShow (isBuy) {
         if (isBuy) {
@@ -217,45 +250,6 @@
     @import "~@scss/variables";
     @import "~@scss/mixins";
 
-    .art-market-tab__list-row {
-        cursor: pointer;
-    }
-
-    .art-market-tab__list-no-transactions {
-        width: 100%;
-        text-align: center;
-        margin: 0 auto;
-
-        & > i {
-            color: $col-md-primary-secondary-inactive !important;
-        }
-
-        & > p {
-            color: $col-md-primary-inactive;
-        }
-    }
-
-    .orders__list {
-        width: 100%;
-    }
-
-    .art-market-tab__cancel-btn {
-        margin-left: -18px;
-    }
-
-    .art-market-tab__list-title {
-        min-height: 0;
-        margin-bottom: 1 * $point;
-    }
-
-    .art-market-tab__list {
-        .md-table-head-label,
-        .md-table-cell-container {
-            padding-right: 4px;
-            padding-left: 4px;
-        }
-    }
-
     .art-market-tab__list-form-divider {
         border: none;
         border-bottom: 1px dashed $col-horizontal-content-divider;
@@ -267,10 +261,6 @@
         margin-right: 10px;
     }
 
-    .art-market-tab__list-no-transactions-btn {
-        margin-top: 3 * $point;
-    }
-
     .art-market-tab__list-explanations {
         margin: 2 * $point auto 1 * $point !important;
         text-align: center;
@@ -278,65 +268,12 @@
         max-width: 100% !important;
     }
 
-    .art-market-tab__actions-wrp {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        margin-top: 2 * $point;
-
-        & > .art-market-tab__list-action-btn {
-            margin-top: 0;
-            flex-shrink: 0;
-        }
-    }
-
-    .art-market-tab__has-offers-msg {
-        padding-left: 1.3 * $point;
-        font-size: 1.2 * $point;
-        color: $col-md-primary-inactive;
-    }
-
     .app-market__buy-form-wrp {
-        width: 100%;
-        margin-top: 2 * $point;
+        width: 48.5%;
         padding: 2 * $point;
+        max-height: 191px;
         border: 1px dashed $col-light-bg-content-emphasis-border-color;
         position: relative;
-    }
-
-    .art-market-tab__not-available-for-artists {
-        padding: 24px 0;
-        text-align: center;
-        font-size: 14px;
-        color: $col-md-primary;
-    }
-
-    .art-market-tab__list-cell {
-        &--right > .md-table-cell-container,
-        &--right > .md-table-head-container {
-            padding-right: 4px !important;
-            text-align: right;
-
-            & > .md-table-head-label {
-                padding-right: 16px !important;
-            }
-
-            & > button {
-                margin-left: 0;
-            }
-        }
-    }
-
-    .app-market__unavailable-for-guests {
-        padding-top: 24px;
-        margin-bottom: 16px !important;
-        text-align: center;
-        max-width: 100% !important;
-    }
-
-    .app-market__unavailable-for-guests-login-btn {
-        margin: 0 auto 24px;
-        display: block;
     }
 
     .art-market-tab__lists {
@@ -348,7 +285,7 @@
         }
 
         .art-market-tab__list {
-            width: 48%;
+            width: 48.5%;
             @media (max-width: 1000px) {
                 width: 100%;
             }
