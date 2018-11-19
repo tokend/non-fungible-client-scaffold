@@ -11,7 +11,8 @@
       <div class="arts-explore__sale-overview-inner">
         <div class="arts-explore__card-wrapper-outer"
           v-for="art in artList"
-          :key="art.code">
+          :key="art.code"
+           v-if="art.photoUrl">
           <router-link :to="{name: 'arts.art-details', params: { id: art.code }}"
                       tag="button"
                       class="arts-explore__card-wrapper">
@@ -61,7 +62,6 @@
         if (Object.keys(this.filters).length) {
           return list
             .filter(art => {
-              console.log(art)
               return art.code.toLowerCase().indexOf(this.filters.code) !== -1
             })
             .filter(art => {

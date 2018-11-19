@@ -121,8 +121,6 @@ export default {
       this.form.tokenCode = this.tokenCodes[0] || null
     },
     async tryBindAddress (token) {
-      console.log('trying to bind address, token: ')
-      console.log(token)
       if (!token || !token.externalSystemType) {
         return
       }

@@ -48,7 +48,6 @@ export class KycTemplateParser {
 
   static getSaveableDocuments (documents) {
     const result = {}
-    console.log(Object.entries(documents))
     for (const [type, doc] of Object.entries(documents)) {
       result[type] = doc.getDetailsForSave()
     }

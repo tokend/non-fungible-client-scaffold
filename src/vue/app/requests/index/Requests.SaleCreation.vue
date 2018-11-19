@@ -179,8 +179,6 @@ export default {
 
     async goFundDetails (code) {
       const sale = await salesService.loadSaleByTokenCode(code)
-      console.log('sale.id')
-      console.log(sale.id)
       this.$router.push({
         ...vueRoutes.saleDetails,
         params: { id: sale.id }

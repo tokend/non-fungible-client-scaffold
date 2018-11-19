@@ -47,7 +47,7 @@
           this.chartData = (await chartsService.loadChartsForToken(asset)).data()
         } catch (error) {
           if (error instanceof errors.NotFoundError) {
-            console.log('error')
+            console.error(error)
             ErrorHandler.processUnexpected(error)
           }
         }
