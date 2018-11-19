@@ -55,10 +55,6 @@ export const testAction = (opts, done) => {
         try {
           expect(expectedAction.type).to.equal(type)
           if (payload) {
-            console.log('action payload:')
-            console.log(payload)
-            console.log('expected payload:')
-            console.log(expectedActionPayload)
             expect(payload).to.deep.equal(expectedActionPayload)
           }
         } catch (error) {
