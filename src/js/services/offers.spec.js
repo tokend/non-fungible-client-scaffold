@@ -25,7 +25,6 @@ describe('offers.service test', () => {
 
   it('loadUserSaleOffers() should properly build request url', () => {
     const prefix = offerPrefixes.saleOffers
-    console.log(prefix)
     return ServiceTestHelper.doAxiosMockedRequest(
       () => offersService.loadUserSaleOffers(mockOrderBookId),
       prefix,
@@ -36,7 +35,6 @@ describe('offers.service test', () => {
 
   it('loadTradeOffers() should properly build request url', () => {
     const prefix = offerPrefixes.currentOffers
-    console.log(prefix)
     const opts = {
       base: mockBaseTokenCode,
       quote: mockQuoteTokenCode,
@@ -52,7 +50,6 @@ describe('offers.service test', () => {
 
   it('loadCompletedTrades() should properly build request url', () => {
     const prefix = offerPrefixes.trades
-    console.log(prefix)
     const opts = {
       base: mockBaseTokenCode,
       quote: mockQuoteTokenCode
