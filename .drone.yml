@@ -1,0 +1,21 @@
+pipeline:
+  docker:
+    image: docker:latest
+    secrets: [ dockerhub_user, dockerhub_pwd, rsa_key ]
+    commands:
+      - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PWD
+      - docker build --pull -t $DOCKERHUB_REPO:${DRONE_COMMIT_SHA} .
+      - docker push $DOCKERHUB_REPO:${DRONE_COMMIT_SHA}
+      - docker tag $DOCKERHUB_REPO:${DRONE_COMMIT_SHA} $DOCKERHUB_REPO:$DOCKERHUB_TAG
+      - docker push $DOCKERHUB_REPO:$DOCKERHUB_TAG
+    environment:
+      - DOCKERHUB_REPO=tokend/web-client
+      - DOCKERHUB_TAG=art
+      - DOCKERHUB_USER=$$DOCKERHUB_USER
+      - DOCKERHUB_PWD=$$DOCKERHUB_PWD
+      - RSA_KEY=$$RSA_KEY
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    when:
+      event: push
+      branch: master
