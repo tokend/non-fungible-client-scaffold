@@ -11,7 +11,7 @@ pipeline:
     environment:
       - DOCKERHUB_REPO=tokend/web-client
       - DOCKERHUB_TAG=non-fungible
-      - DOCKERHUB_USER=$$DOCKERHUN_USER
+      - DOCKERHUB_USER=$$DOCKERHUB_USER
       - DOCKERHUB_PWD=$$DOCKERHUB_PWD
       - RSA_KEY=$$RSA_KEY
     volumes:
