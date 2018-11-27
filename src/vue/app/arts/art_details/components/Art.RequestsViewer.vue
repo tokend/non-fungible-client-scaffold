@@ -34,8 +34,8 @@
                         <td :class="`request-viewer__record-cell
                                      request-viewer__record-cell--left
                                      request-viewer__state-cell
-                                     request-viewer__state-cell--${REQUEST_STATES_STR[request.state] || request.state}`">
-                            {{ REQUEST_STATES_STR[request.state] || request.state }}
+                                     request-viewer__state-cell--${request.state}`">
+                            {{ REQUEST_STATES_VERBOSE[request.state] || request.state }}
                         </td>
 
                         <td class="request-viewer__record-cell">
@@ -47,7 +47,7 @@
                         </td>
 
                         <td class="request-viewer__record-cell">
-                            <template v-if="request.address && (request.state !== REQUEST_STATES_STR.permanently_rejected)">
+                            <template v-if="request.address && (request.state !== REQUEST_STATES_VERBOSE.permanently_rejected)">
                                 <button class="app__button-icon"
                                         @click="activeRequest = request; isDialogOpened = true">
                                     <md-icon md-src="/static/qr-code.svg"/>
@@ -71,25 +71,25 @@
 </template>
 
 <script>
-  import NoDataMessage from '../../../../common/messages/NoDataMessage'
-  import SwapAddress from './Arts.AddressViewer'
+    import NoDataMessage from '../../../../common/messages/NoDataMessage'
+    import SwapAddress from './Arts.AddressViewer'
 
-  import { REQUEST_STATES_STR } from '@/js/const/request_states.const'
-  import { i18n } from '@/js/i18n'
+    import { REQUEST_STATES_VERBOSE } from '@/js/const/request_states.const'
+    import { i18n } from '@/js/i18n'
 
-  export default {
-    props: ['requests'],
-    data: _ => ({
-      i18n,
-      isDialogOpened: false,
-      activeRequest: null,
-      REQUEST_STATES_STR
-    }),
-    components: {
-      NoDataMessage,
-      SwapAddress
+    export default {
+        props: ['requests'],
+        data: _ => ({
+            i18n,
+            isDialogOpened: false,
+            activeRequest: null,
+            REQUEST_STATES_VERBOSE
+        }),
+        components: {
+            NoDataMessage,
+            SwapAddress
+        }
     }
-  }
 </script>
 
 <style lang="scss" scoped>
@@ -104,8 +104,6 @@
     }
 
     .request-viewer__record-cell {
-        $padding: 3 * $point;
-
         color: $col-md-primary;
         padding: $point 3 * $point $point 0;
         text-align: center;
@@ -134,6 +132,7 @@
 
     .request-viewer__state-cell--rejected:before,
     .request-viewer__state-cell--canceled:before,
+    .request-viewer__state-cell--permanently_rejected:before,
     .request-viewer__state-cell--cancelled:before {
         background-color: $col-md-accent;
     }
