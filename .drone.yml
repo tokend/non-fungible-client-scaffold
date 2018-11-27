@@ -10,7 +10,7 @@ pipeline:
       - docker push $DOCKERHUB_REPO:$DOCKERHUB_TAG
     environment:
       - DOCKERHUB_REPO=tokend/web-client
-      - DOCKERHUB_TAG=non-fungible
+      - DOCKERHUB_TAG=art
       - DOCKERHUB_USER=$$DOCKERHUB_USER
       - DOCKERHUB_PWD=$$DOCKERHUB_PWD
       - RSA_KEY=$$RSA_KEY
