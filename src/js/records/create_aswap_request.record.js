@@ -17,6 +17,6 @@ export class CreateAtomicSwapRequestRecord {
   }
 
   askRequestID () {
-    return this.result().result().results()[0].tr().createAtomicSwapRequestResult().success().requestId().toString()
+    return this.result().result().results()[0].tr().createASwapRequestResult().success().requestId().toString()
   }
 }
