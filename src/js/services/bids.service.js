@@ -23,7 +23,7 @@ export class BidsService extends Service {
   }
 
   async createAtomicSwapRequest (opts) {
-    const operation = Sdk.base.CreateAtomicSwapRequestBuilder.createAtomicSwapRequest(opts)
+    const operation = Sdk.base.CreateAtomicSwapRequestBuilder.createASwapRequest(opts)
 
     let envelope = new Sdk.base.TransactionBuilder(Sdk.getInstance().wallet.accountId)
       .addOperation(operation)

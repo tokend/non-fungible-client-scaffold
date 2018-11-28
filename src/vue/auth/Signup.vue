@@ -23,6 +23,7 @@
             id="login-password"
             type="password"
             name="password"
+            ref="password"
             :togglePassword="true"
             :label="i18n.su_pwd()"
             :errorMessage="errorMessage('password')"
