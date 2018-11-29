@@ -19,7 +19,7 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.1.2",
     "@std/esm": "^0.18.0",
-    "@tokend/js-sdk": "https://github.com/tokend/new-js-sdk#feature/atomic_swap",
+    "@tokend/js-sdk": "https://github.com/tokend/new-js-sdk.git#feature/atomic_swap",
     "@tokend/wallet.js": "https://github.com/tokend/wallet.js.git",
     "@vue/test-utils": "^1.0.0-beta.11",
     "accounting": "^0.4.1",
