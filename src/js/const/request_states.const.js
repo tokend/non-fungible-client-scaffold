@@ -15,9 +15,9 @@ export const REQUEST_STATES_STR = Object.freeze({
 })
 
 export const REQUEST_STATES_VERBOSE = Object.freeze({
-    [REQUEST_STATES_STR.pending]: 'pending',
-    [REQUEST_STATES_STR.cancelled]: 'cancelled',
-    [REQUEST_STATES_STR.approved]: 'approved',
-    [REQUEST_STATES_STR.rejected]: 'rejected',
-    [REQUEST_STATES_STR.permanentlyRejected]: 'permanently rejected'
+  [REQUEST_STATES_STR.pending]: 'pending',
+  [REQUEST_STATES_STR.cancelled]: 'cancelled',
+  [REQUEST_STATES_STR.approved]: 'approved',
+  [REQUEST_STATES_STR.rejected]: 'rejected',
+  [REQUEST_STATES_STR.permanentlyRejected]: 'permanently rejected'
 })
