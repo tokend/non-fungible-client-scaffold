@@ -78,17 +78,17 @@
     import { i18n } from '@/js/i18n'
 
     export default {
-        props: ['requests'],
-        data: _ => ({
-            i18n,
-            isDialogOpened: false,
-            activeRequest: null,
-            REQUEST_STATES_VERBOSE
-        }),
-        components: {
-            NoDataMessage,
-            SwapAddress
-        }
+      props: ['requests'],
+      data: _ => ({
+        i18n,
+        isDialogOpened: false,
+        activeRequest: null,
+        REQUEST_STATES_VERBOSE
+      }),
+      components: {
+        NoDataMessage,
+        SwapAddress
+      }
     }
 </script>
 
