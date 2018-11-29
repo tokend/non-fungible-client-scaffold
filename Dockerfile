@@ -7,8 +7,8 @@ RUN true \
  && npm run build config/default.env.js \
  && true
 
-FROM nginx:latest
-RUN echo  $'\n\
+FROM nginx:alpine
+RUN echo  '\n\
     server {\n\
         listen 80 default_server;\n\
         root /usr/share/nginx/html;\n\
